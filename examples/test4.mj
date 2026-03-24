@@ -1,0 +1,13 @@
+func add(a, b) {
+    return a + b
+}
+
+func square(x) {
+    return x * x
+}
+
+let result1 = add(10, 20)
+print(result1)
+
+let result2 = square(5)
+print(result2)
