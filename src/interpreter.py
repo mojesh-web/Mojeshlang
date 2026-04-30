@@ -24,6 +24,37 @@ class Interpreter:
     def __init__(self):
         self.variables = {}
         self.functions = {}
+        
+        # 🔥 Standard library built-ins (antigravity)
+        self.builtins = {
+            "antigravity.http_get": self._builtin_http_get,
+            "antigravity.write_json": self._builtin_write_json,
+        }
+
+    def _builtin_http_get(self, args):
+        import urllib.request
+        if not args:
+            raise RuntimeError("antigravity.http_get expects 1 argument (url)")
+        url = args[0]
+        try:
+            with urllib.request.urlopen(url) as response:
+                return response.read().decode('utf-8')
+        except Exception as e:
+            return str(e)
+
+    def _builtin_write_json(self, args):
+        import json
+        if len(args) != 2:
+            raise RuntimeError("antigravity.write_json expects 2 arguments (filepath, data)")
+        filepath = args[0]
+        data = args[1]
+        try:
+            with open(filepath, 'w') as f:
+                json.dump(data, f)
+            return 1 # Success
+        except Exception as e:
+            print(f"Error writing JSON: {e}")
+            return 0 # Failure
 
     def interpret(self, node):
         if isinstance(node, Program):
@@ -106,6 +137,11 @@ class Interpreter:
                 raise RuntimeError(f"Unknown operator: {op}")
 
         elif isinstance(node, CallExpression):
+            # 🔥 Intercept built-in functions first
+            if node.callee in self.builtins:
+                evaluated_args = [self.evaluate(arg) for arg in node.arguments]
+                return self.builtins[node.callee](evaluated_args)
+
             func = self.functions.get(node.callee)
 
             if not func:
