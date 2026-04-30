@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mojeshlang
 
 Mojeshlang is a lightweight, strictly evaluated, dynamically typed interpreted programming language implemented entirely in Python. Designed with a focus on pedagogical clarity and extensibility, Mojeshlang serves as a robust exploration of compiler theory and programming language design.
@@ -55,3 +56,39 @@ Contributions are welcome from developers interested in language design, memory 
 
 ---
 *Developed to rigorously explore the depths of Computer Science fundamentals.*
+=======
+# 🚀 Mojeshlang
+
+A custom-built programming language with its own compiler, bytecode virtual machine, and desktop IDE.
+
+---
+
+## ✨ Features
+
+- 🧠 Custom Lexer & Parser
+- 🌳 Abstract Syntax Tree (AST)
+- ⚙️ Bytecode Compiler
+- 🔥 Stack-based Virtual Machine
+- 🔁 Control Flow (if / else, while)
+- 📞 Function Support (call stack + return values)
+- 🖥️ Tkinter-based IDE
+- 🎨 Syntax Highlighting
+- 🧾 Bytecode Viewer
+
+---
+
+## 🖼️ Demo
+
+> Add a screenshot of your IDE here
+
+---
+
+## 📌 Example
+
+```mj
+func add(a, b) {
+    return a + b
+}
+
+print(add(10, 20))
+>>>>>>> da183d4a413fd69dae6bb7d24a6878ae334c0704
