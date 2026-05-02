@@ -75,14 +75,6 @@ A custom-built programming language with its own compiler, bytecode virtual mach
 - 🎨 Syntax Highlighting
 - 🧾 Bytecode Viewer
 
----
-
-## 🖼️ Demo
-
-> Add a screenshot of your IDE here
-
----
-
 ## 📌 Example
 
 ```mj
