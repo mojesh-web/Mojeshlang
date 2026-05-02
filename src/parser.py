@@ -13,8 +13,6 @@ from ast_nodes import (
     Identifier,
     BinaryExpression,
 )
-
-
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
