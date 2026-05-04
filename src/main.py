@@ -72,6 +72,7 @@ def antigravity_easter_egg():
     time.sleep(1)
     # Replace this URL with your actual Mojeshlang repo
     webbrowser.open("https://github.com/mojesh-web/Mojeshlang")
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python src/main.py <file.moj>")
@@ -92,6 +93,9 @@ def main():
         if not code.strip():
             return # Script was just the easter egg, nothing left to parse
 
+    # Start the timer!
+    start_time = time.perf_counter()
+
     # 1. Lexical Analysis
     lexer = Lexer(code)
     tokens = lexer.tokenize()
@@ -108,6 +112,11 @@ def main():
     # 4. Execution (Virtual Machine)
     vm = VirtualMachine()
     vm.run(instructions, functions)
+
+    # Stop the timer!
+    end_time = time.perf_counter()
+    execution_time = (end_time - start_time) * 1000  # Convert to milliseconds
+    print(f"\n[Mojeshlang Telemetry] Pipeline executed in {execution_time:.4f} ms")
 
 if __name__ == "__main__":
     main()

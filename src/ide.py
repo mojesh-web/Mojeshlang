@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
@@ -5,7 +6,6 @@ from lexer import Lexer
 from parser import Parser
 from compiler import Compiler
 from vm import VirtualMachine
-
 
 class MojeshIDE:
     def __init__(self, root):
@@ -91,14 +91,19 @@ class MojeshIDE:
             index = end
 
     # --------------------------
-    # RUN CODE
+    # RUN SCRIPT (NEW VM PIPELINE)
     # --------------------------
     def run_code(self):
-        code = self.code_editor.get("1.0", tk.END)
+        code = self.code_editor.get("1.0", "end-1c") 
+        self.output_console.delete("1.0", tk.END) 
 
-        self.output_console.delete("1.0", tk.END)
+        if not code.strip():
+            return
 
         try:
+            start_time = time.perf_counter()
+
+            # --- THE MOJESHLANG PIPELINE ---
             lexer = Lexer(code)
             tokens = lexer.tokenize()
 
@@ -107,34 +112,29 @@ class MojeshIDE:
 
             compiler = Compiler()
             compiler.compile(ast)
-
             instructions, functions = compiler.get_instructions()
 
             vm = VirtualMachine()
-
-            # Capture output
-            import sys
-            from io import StringIO
-
-            old_stdout = sys.stdout
-            sys.stdout = StringIO()
-
             vm.run(instructions, functions)
+            # -------------------------------
 
-            output = sys.stdout.getvalue()
-            sys.stdout = old_stdout
+            end_time = time.perf_counter()
+            execution_time = (end_time - start_time) * 1000
 
-            self.output_console.insert(tk.END, output)
+            telemetry_msg = f"[Mojeshlang Telemetry] Pipeline executed in {execution_time:.4f} ms\n"
+            memory_msg = f"VM Memory State: {vm.variables}\n" 
+            
+            self.output_console.insert(tk.END, telemetry_msg + memory_msg)
 
         except Exception as e:
-            self.output_console.insert(tk.END, f"Error:\n{str(e)}")
-
+            error_msg = f"Fatal Error: {str(e)}\n"
+            self.output_console.insert(tk.END, error_msg)
+        
     # --------------------------
     # SHOW BYTECODE
     # --------------------------
     def show_bytecode(self):
         code = self.code_editor.get("1.0", tk.END)
-
         self.bytecode_view.delete("1.0", tk.END)
 
         try:
@@ -146,7 +146,6 @@ class MojeshIDE:
 
             compiler = Compiler()
             compiler.compile(ast)
-
             instructions, _ = compiler.get_instructions()
 
             for instr in instructions:
@@ -186,7 +185,6 @@ class MojeshIDE:
             f.write(code)
 
         messagebox.showinfo("Saved", "File saved successfully!")
-
 
 # --------------------------
 # START IDE
